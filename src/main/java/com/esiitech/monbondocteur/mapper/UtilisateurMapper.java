@@ -18,7 +18,7 @@ public class UtilisateurMapper {
         utilisateurDTO.setPrenom(utilisateur.getPrenom());
         utilisateurDTO.setEmail(utilisateur.getEmail());
         utilisateurDTO.setMotDePasse(utilisateur.getMotDePasse());
-        utilisateurDTO.setRole(utilisateur.getRole().name()); // Conversion Enum -> String
+        utilisateurDTO.setRole(utilisateur.getRole());
         return utilisateurDTO;
     }
 
@@ -33,7 +33,7 @@ public class UtilisateurMapper {
                 utilisateurDTO.getPrenom(),
                 utilisateurDTO.getEmail(),
                 utilisateurDTO.getMotDePasse(),
-                Role.valueOf(utilisateurDTO.getRole()) // Conversion String -> Enum
+                utilisateurDTO.getRole() // Conversion String -> Enum
         );
         return utilisateur;
     }

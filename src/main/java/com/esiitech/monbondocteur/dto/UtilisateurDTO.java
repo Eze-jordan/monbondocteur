@@ -1,5 +1,6 @@
     package com.esiitech.monbondocteur.dto;
 
+    import com.esiitech.monbondocteur.model.Role;
     import com.esiitech.monbondocteur.model.Utilisateur;
     import lombok.Getter;
     import lombok.Setter;
@@ -12,7 +13,7 @@
         private String prenom;
         private String email;
         private String motDePasse;
-        private String role; // Stocké sous forme de String
+        private Role role; // Stocké sous forme de String
 
         public Long getId() {
             return id;
@@ -32,6 +33,14 @@
 
         public String getEmail() {
             return email;
+        }
+
+        public Role getRole() {
+            return role;
+        }
+
+        public void setRole(Role role) {
+            this.role = role;
         }
 
         public void setEmail(String email) {
@@ -54,13 +63,6 @@
             this.motDePasse = motDePasse;
         }
 
-        public String getRole() {
-            return role;
-        }
-
-        public void setRole(String role) {
-            this.role = role;
-        }
 
         public UtilisateurDTO() {}
 
@@ -71,6 +73,6 @@
             this.prenom = utilisateur.getPrenom();
             this.email = utilisateur.getEmail();
             this.motDePasse = utilisateur.getMotDePasse();
-            this.role = utilisateur.getRole().name(); // Conversion Enum -> String
+            this.role = utilisateur.getRole();
         }
     }

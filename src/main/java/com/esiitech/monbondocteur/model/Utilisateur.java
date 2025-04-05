@@ -1,10 +1,9 @@
 package com.esiitech.monbondocteur.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(
         name = "utilisateurs",
@@ -24,9 +23,26 @@ public class Utilisateur {
     @Column(nullable = false)
     private String motDePasse; // Stocké en BCrypt
 
+    @Column(nullable = false)
+    private boolean actif = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    public Utilisateur() {
+        // Constructeur vide requis par Hibernate
+    }
+
+    public Utilisateur(Long id, String nom, String prenom, String email, String motDePasse, Role role) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.motDePasse = motDePasse;
+        this.role = role;
+        this.actif = false;
+    }
 
     public Long getId() {
         return id;
@@ -68,20 +84,19 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
     }
 
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
+
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Utilisateur(Long id, String nom, String prenom, String email, String motDePasse, Role role) {
-        this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.motDePasse = motDePasse;
         this.role = role;
     }
 }

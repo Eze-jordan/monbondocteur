@@ -1,12 +1,14 @@
 package com.esiitech.monbondocteur.controller;
 
 import com.esiitech.monbondocteur.dto.UtilisateurDTO;
+import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
@@ -17,6 +19,11 @@ public class UtilisateurController {
     @Autowired
     public UtilisateurController(UtilisateurService utilisateurService) {
         this.utilisateurService = utilisateurService;
+    }
+    @PostMapping("/activation")
+    public void activation(@RequestBody Map<String, String> activation){
+
+       this.utilisateurService.activation(activation);
     }
 
     // Récupère tous les utilisateurs
