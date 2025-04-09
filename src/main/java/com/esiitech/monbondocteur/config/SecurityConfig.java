@@ -19,12 +19,18 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Routes publiques
+                        .requestMatchers(
+                                "/api/utilisateurs/activation", // 👈 on autorise cette route
+                                "/api/utilisateurs",            // 👈 autorisation pour l’inscription aussi si besoin
+                                "/api/**"                       // 👈 tout le reste si tu veux
+                        ).permitAll()
+                        .anyRequest().authenticated()      // 👈 sécurise les autres
                 )
                 .formLogin()
                 .and()
-                .httpBasic(); // Active l'authentification basique (Postman, etc.)
+                .httpBasic(); // permet l’authentification via Postman, etc.
 
         return http.build();
     }
+
 }

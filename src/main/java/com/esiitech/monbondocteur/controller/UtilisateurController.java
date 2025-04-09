@@ -1,7 +1,6 @@
 package com.esiitech.monbondocteur.controller;
 
 import com.esiitech.monbondocteur.dto.UtilisateurDTO;
-import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
