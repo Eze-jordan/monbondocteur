@@ -1,4 +1,5 @@
 package com.esiitech.monbondocteur.controller;
+import com.esiitech.monbondocteur.security.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.esiitech.monbondocteur.dto.AuthentificationDTO;
@@ -23,11 +24,12 @@ public class UtilisateurController {
 
     private final AuthenticationManager authenticationManager;
     private final UtilisateurService utilisateurService;
-
+    private JwtService jwtService;
     @Autowired
-    public UtilisateurController(UtilisateurService utilisateurService, AuthenticationManager authenticationManager) {
+    public UtilisateurController(UtilisateurService utilisateurService, AuthenticationManager authenticationManager , JwtService jwtService) {
         this.utilisateurService = utilisateurService;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/activation")
@@ -44,13 +46,13 @@ public class UtilisateurController {
                 )
         );
 
-        if (authentication.isAuthenticated()) {
-            log.info("Connexion réussie pour l'utilisateur : {}", authentificationDTO.email());
-            return Map.of("message", "Connexion réussie");
-        } else {
-            log.warn("Échec de la connexion pour : {}", authentificationDTO.email());
-            throw new RuntimeException("Identifiants invalides");
-        }
+
+            if (authentication.isAuthenticated()) {
+                return this.jwtService.generate(authentificationDTO.email());
+
+
+            }
+            return null;
     }
 
     @GetMapping
