@@ -2,6 +2,7 @@ package com.esiitech.monbondocteur.security;
 
 import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.service.UtilisateurService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
 @AllArgsConstructor
 @Service
@@ -28,20 +30,43 @@ public class JwtService {
         CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
         return this.generateJwt(userDetails.getUtilisateur());
     }
+    public String extractUsername(String token) {
+        return this.getClaim(token, Claims::getSubject);
+    }
 
+    public boolean isTokenExpired(String token) {
+        Date expirationDate =this.getClaim(token, Claims::getExpiration);
+        return expirationDate.before(new Date());
+    }
+
+
+    private <T> T getClaim(String token, Function<Claims, T> function ) {
+        Claims claims = getAllClaims(token);
+        return function.apply(claims);
+    }
+
+    private Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+    // Définit l'heure actuelle et l'expiration du JWT
+    final long currentTime = System.currentTimeMillis();
+    final long expirationTime = currentTime + 60 * 60 * 1000;  // 30 minutes
 
     // Cette méthode génère un JWT à partir des informations de l'utilisateur
     private Map<String, String> generateJwt(Utilisateur utilisateur) {
         // Crée les informations de l'utilisateur à inclure dans le JWT
         Map<String, ? extends Serializable> claims = Map.of(
                 "nom", utilisateur.getNom(),
-                "email", utilisateur.getEmail(),
-                "role", utilisateur.getRole()
+                "role", utilisateur.getRole(),
+                Claims.EXPIRATION, new Date(expirationTime),
+                Claims.SUBJECT,utilisateur.getEmail()
         );
 
-        // Définit l'heure actuelle et l'expiration du JWT
-        final long currentTime = System.currentTimeMillis();
-        final long expirationTime = currentTime + 30 * 60 * 1000;  // 30 minutes
+
 
         // Génére le JWT avec les informations et la clé de signature
         final String bearer = Jwts.builder()
@@ -62,4 +87,6 @@ public class JwtService {
         final byte[] decode = Decoders.BASE64.decode(ENCRYPTION_KEY);
         return Keys.hmacShaKeyFor(decode);  // Retourne la clé pour signer le JWT
     }
+
+
 }

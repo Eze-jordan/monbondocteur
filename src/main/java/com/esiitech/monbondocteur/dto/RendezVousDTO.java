@@ -1,6 +1,7 @@
 package com.esiitech.monbondocteur.dto;
 
 import com.esiitech.monbondocteur.model.Sexe;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ public class RendezVousDTO {
     private String prenom;
     private int age;
     private Sexe sexe;
+    private String email;
     private String numeroTelephone;
     private Long medecinId;
     private String description;
@@ -78,5 +80,13 @@ public class RendezVousDTO {
 
     public void setQuartier(String quartier) {
         this.quartier = quartier;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

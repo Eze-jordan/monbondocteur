@@ -20,6 +20,8 @@ public class RendezVous {
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
 
+    @Column(unique = true, nullable = false)
+    private String email;
     private String numeroTelephone;
     private String description;
     private String quartier;
@@ -98,5 +100,17 @@ public class RendezVous {
 
     public void setMedecin(Utilisateur medecin) {
         this.medecin = medecin;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+
     }
 }

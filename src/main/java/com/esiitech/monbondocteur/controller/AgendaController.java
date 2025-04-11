@@ -20,6 +20,10 @@ public class AgendaController {
     public ResponseEntity<AgendaDTO> ajouterDisponibilite(@RequestBody AgendaDTO agendaDTO) {
         return ResponseEntity.ok(agendaService.ajouterDisponibilite(agendaDTO));
     }
+    @GetMapping
+    public ResponseEntity<List<AgendaDTO>> getAllAgendas() {
+        return ResponseEntity.ok(agendaService.getAllAgendas());
+    }
 
     @GetMapping("/medecin/{medecinId}")
     public ResponseEntity<List<AgendaDTO>> getDisponibilitesParMedecin(@PathVariable Long medecinId) {

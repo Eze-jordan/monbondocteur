@@ -52,4 +52,12 @@ public class AgendaService {
                 .map(agendaMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<AgendaDTO> getAllAgendas() {
+        return agendaRepository.findAll()
+                .stream()
+                .map(agendaMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }

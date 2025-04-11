@@ -14,6 +14,7 @@ public class RendezVousMapper {
         rendezVous.setPrenom(dto.getPrenom());
         rendezVous.setAge(dto.getAge());
         rendezVous.setSexe(dto.getSexe());
+        rendezVous.setEmail(dto.getEmail());
         rendezVous.setNumeroTelephone(dto.getNumeroTelephone());
         rendezVous.setDescription(dto.getDescription());
         rendezVous.setQuartier(dto.getQuartier());
