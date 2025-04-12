@@ -48,7 +48,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/utilisateurs/activation", // 👈 on autorise cette route
                                 "/api/utilisateurs",            // 👈 autorisation pour l’inscription aussi si besoin
-                                "/api/utilisateurs/connexion"
+                                "/api/utilisateurs/connexion",
+                                 "/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()      // 👈 sécurise les autres
                 )

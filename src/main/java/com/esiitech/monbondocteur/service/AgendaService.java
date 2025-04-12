@@ -53,11 +53,12 @@ public class AgendaService {
                 .collect(Collectors.toList());
     }
 
-    public List<AgendaDTO> getAllAgendas() {
+    public List<AgendaDTO> getAllDisponibilites() {
         return agendaRepository.findAll()
                 .stream()
                 .map(agendaMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 
 }
