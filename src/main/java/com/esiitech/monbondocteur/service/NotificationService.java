@@ -38,4 +38,46 @@ public class NotificationService {
     public void setJavaMailSender(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
+
+    public void envoyerAuPatient(String email, String nomPatient, String nomMedecin) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("no-reply@gmail.com");
+        message.setTo(email);
+        message.setSubject("Confirmation de votre rendez-vous");
+        String texte = String.format(
+                "Bonjour %s,\n\n" +
+                        "Nous vous confirmons que votre rendez-vous avec le docteur %s a bien été enregistré dans notre système.\n\n" +
+                        "📅 Veuillez vous assurer d’être disponible à la date et à l’heure convenues.\n" +
+                        "Si vous souhaitez modifier ou annuler ce rendez-vous, merci de le faire au moins 24 heures à l’avance\n" +
+                        "via notre plateforme MonBonDocteur.\n\n" +
+                        "Nous restons à votre disposition pour toute autre demande.\n\n" +
+                        "Cordialement,\n" +
+                        "L’équipe MonBonDocteur."
+                , nomPatient, nomMedecin
+        );
+
+        message.setText(texte);
+        javaMailSender.send(message);
+    }
+
+    public void envoyerAuMedecin(String email, String nomMedecin, String nomPatient) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("no-reply@gmail.com");
+        message.setTo(email);
+        message.setSubject("Nouveau rendez-vous programmé");
+
+        String texte = String.format(
+                "Bonjour Dr %s,\n\n" +
+                        "Un nouveau rendez-vous vient d’être enregistré avec le patient : %s.\n\n" +
+                        "📅 Merci de consulter votre planning pour prendre connaissance de ce rendez-vous.\n" +
+                        "Cordialement,\n" +
+                        "L’équipe MonBonDocteur.",
+                nomMedecin, nomPatient
+        );
+
+
+        message.setText(texte);
+        javaMailSender.send(message);
+    }
+
 }

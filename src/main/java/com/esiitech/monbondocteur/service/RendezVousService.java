@@ -24,6 +24,10 @@ public class RendezVousService {
     @Autowired
     private RendezVousMapper rendezVousMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
+
     public RendezVous ajouterRendezVous(RendezVousDTO dto) {
         Utilisateur medecin = utilisateurRepository.findById(dto.getMedecinId())
                 .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
@@ -32,6 +36,10 @@ public class RendezVousService {
         if (!medecin.getRole().equals(Role.MEDECIN)) {
             throw new RuntimeException("L'utilisateur sélectionné n'est pas un médecin.");
         }
+        notificationService.envoyerAuPatient(dto.getEmail(), dto.getPrenom(), medecin.getNom());
+        notificationService.envoyerAuMedecin(medecin.getEmail(), medecin.getNom(), dto.getPrenom());
+
+
 
         RendezVous rendezVous = rendezVousMapper.toEntity(dto, medecin);
         return rendezVousRepository.save(rendezVous);
