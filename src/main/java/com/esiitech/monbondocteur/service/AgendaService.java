@@ -8,6 +8,8 @@ import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.repository.AgendaRepository;
 import com.esiitech.monbondocteur.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,17 +29,21 @@ public class AgendaService {
     private AgendaMapper agendaMapper;
 
     public AgendaDTO ajouterDisponibilite(AgendaDTO agendaDTO) {
-        Utilisateur medecin = utilisateurRepository.findById(agendaDTO.getMedecinId())
-                .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Utilisateur medecin = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         if (!medecin.getRole().equals(Role.MEDECIN)) {
-            throw new RuntimeException("L'utilisateur n'est pas un médecin !");
+            throw new RuntimeException("Seuls les médecins peuvent ajouter des disponibilités !");
         }
 
         Agenda agenda = agendaMapper.toEntity(agendaDTO, medecin);
         agenda = agendaRepository.save(agenda);
         return agendaMapper.toDTO(agenda);
     }
+
 
     public List<AgendaDTO> getDisponibilitesParMedecin(Long medecinId) {
         return agendaRepository.findByMedecinId(medecinId)

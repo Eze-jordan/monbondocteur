@@ -19,7 +19,6 @@ public class AgendaMapper {
 
     public AgendaDTO toDTO(Agenda agenda) {
         AgendaDTO dto = new AgendaDTO();
-        dto.setMedecinId(agenda.getMedecin().getId());
         dto.setDate(agenda.getDate());
         dto.setHeureDebut(agenda.getHeureDebut());
         dto.setHeureFin(agenda.getHeureFin());

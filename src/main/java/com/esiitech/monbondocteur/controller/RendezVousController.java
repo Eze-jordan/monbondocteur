@@ -1,6 +1,7 @@
 package com.esiitech.monbondocteur.controller;
 
 import com.esiitech.monbondocteur.dto.RendezVousDTO;
+import com.esiitech.monbondocteur.mapper.RendezVousMapper;
 import com.esiitech.monbondocteur.model.RendezVous;
 import com.esiitech.monbondocteur.service.RendezVousService;
 
@@ -15,12 +16,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rendezvous")
+@RequestMapping("/api/appointment")
 @Tag(name = "Rendez-vous", description = "Gestion des rendez-vous médicaux")
 public class RendezVousController {
 
     @Autowired
     private RendezVousService rendezVousService;
+
+    private final RendezVousMapper rendezVousMapper; // ✅ ajoute ça
+
+    public RendezVousController(RendezVousMapper rendezVousMapper) {
+        this.rendezVousMapper = rendezVousMapper;
+    }
+
 
     @PostMapping
     @Operation(summary = "Ajouter un rendez-vous", description = "Permet d'enregistrer un nouveau rendez-vous avec les informations du patient et du médecin.")
@@ -43,6 +51,12 @@ public class RendezVousController {
         List<RendezVous> rendezVousList = rendezVousService.getAllRendezVous();
         return ResponseEntity.ok(rendezVousList);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<RendezVousDTO> modifierRendezVous(@PathVariable Long id, @RequestBody RendezVousDTO dto) {
+        RendezVous modifie = rendezVousService.modifierRendezVous(id, dto);
+        return ResponseEntity.ok(rendezVousMapper.toDTO(modifie));
+    }
+
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un rendez-vous", description = "Supprime un rendez-vous à partir de son identifiant.")

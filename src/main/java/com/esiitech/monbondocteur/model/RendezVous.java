@@ -16,10 +16,8 @@ public class RendezVous {
     private String nomComplet;
     private String prenom;
     private int age;
-
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
-
     @Column(unique = true, nullable = false)
     private String email;
     private String numeroTelephone;
@@ -29,6 +27,18 @@ public class RendezVous {
     @ManyToOne
     @JoinColumn(name = "medecin_id", nullable = false)
     private Utilisateur medecin; // Association avec un médecin
+
+    @JoinColumn(name = "agenda_id", nullable = false)
+    @ManyToOne
+    private  Agenda agenda;
+
+    public Agenda getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
+    }
 
     public Long getId() {
         return id;

@@ -15,6 +15,7 @@ public class RendezVousDTO {
     private String email;
     private String numeroTelephone;
     private Long medecinId;
+    private Long agenaId;
     private String description;
     private String quartier;
 
@@ -88,5 +89,13 @@ public class RendezVousDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getAgenaId() {
+        return agenaId;
+    }
+
+    public void setAgenaId(Long agenaId) {
+        this.agenaId = agenaId;
     }
 }

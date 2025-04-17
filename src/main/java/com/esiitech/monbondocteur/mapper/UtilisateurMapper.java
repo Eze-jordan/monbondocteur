@@ -36,5 +36,7 @@ public class UtilisateurMapper {
                 utilisateurDTO.getRole() // Conversion String -> Enum
         );
         return utilisateur;
+
+
     }
 }

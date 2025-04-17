@@ -45,9 +45,9 @@ public class NotificationService {
         message.setTo(email);
         message.setSubject("Confirmation de votre rendez-vous");
         String texte = String.format(
-                "Bonjour %s,\n\n" +
+                "Bonjour M/Mme %s,\n\n" +
                         "Nous vous confirmons que votre rendez-vous avec le docteur %s a bien été enregistré dans notre système.\n\n" +
-                        "📅 Veuillez vous assurer d’être disponible à la date et à l’heure convenues.\n" +
+                        "📅 Veuillez vous assurer d’être disponible à la date et à l’heure convenues. %s\n" +
                         "Si vous souhaitez modifier ou annuler ce rendez-vous, merci de le faire au moins 24 heures à l’avance\n" +
                         "via notre plateforme MonBonDocteur.\n\n" +
                         "Nous restons à votre disposition pour toute autre demande.\n\n" +

@@ -7,18 +7,11 @@ import java.time.LocalTime;
 
 @Data
 public class AgendaDTO {
-    private Long medecinId;
     private LocalDate date;
     private LocalTime heureDebut;
     private LocalTime heureFin;
 
-    public Long getMedecinId() {
-        return medecinId;
-    }
 
-    public void setMedecinId(Long medecinId) {
-        this.medecinId = medecinId;
-    }
 
     public LocalDate getDate() {
         return date;
