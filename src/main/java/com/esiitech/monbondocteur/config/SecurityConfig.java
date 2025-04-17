@@ -1,4 +1,5 @@
 package com.esiitech.monbondocteur.config;
+
 import com.esiitech.monbondocteur.security.CustomUserDetailsService;
 import com.esiitech.monbondocteur.security.JwtFilter;
 import com.esiitech.monbondocteur.service.UtilisateurService;
@@ -37,22 +38,22 @@ public class SecurityConfig {
     }
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
         return
                 httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        authorize -> authorize
-                        .requestMatchers(
-                                "/api/utilisateurs/activation", // 👈 on autorise cette route
-                                "/api/utilisateurs",            // 👈 autorisation pour l’inscription aussi si besoin
-                                "/api/utilisateurs/connexion",
-                                 "/swagger-ui/**", "/v3/api-docs/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()      // 👈 sécurise les autres
-                )
+                        .cors(AbstractHttpConfigurer::disable)
+                        .csrf(AbstractHttpConfigurer::disable)
+                        .authorizeHttpRequests(
+                                authorize -> authorize
+                                        .requestMatchers(
+                                                "/api/utilisateurs/activation", // 👈 on autorise cette route
+                                                "/api/utilisateurs",            // 👈 autorisation pour l’inscription aussi si besoin
+                                                "/api/utilisateurs/connexion",
+                                                "/swagger-ui/**", "/v3/api-docs/**"
+                                        ).permitAll()
+                                        .anyRequest().authenticated()      // 👈 sécurise les autres
+                        )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
@@ -66,9 +67,8 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
-        return  authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager();
     }
-
 
 
 }
