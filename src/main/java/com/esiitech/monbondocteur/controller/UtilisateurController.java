@@ -2,6 +2,7 @@ package com.esiitech.monbondocteur.controller;
 
 import com.esiitech.monbondocteur.dto.AuthentificationDTO;
 import com.esiitech.monbondocteur.dto.UtilisateurDTO;
+import com.esiitech.monbondocteur.model.Role;
 import com.esiitech.monbondocteur.security.JwtService;
 import com.esiitech.monbondocteur.service.UtilisateurService;
 
@@ -85,6 +86,10 @@ public class UtilisateurController {
     @Operation(summary = "Créer un utilisateur", description = "Permet de créer un nouvel utilisateur")
     public ResponseEntity<UtilisateurDTO> createUtilisateur(@RequestBody UtilisateurDTO utilisateurDTO) {
         UtilisateurDTO createdUtilisateur = utilisateurService.save(utilisateurDTO);
+
+        if (utilisateurDTO.getRole() == null) {
+            utilisateurDTO.setRole(Role.USER);
+        }
         return ResponseEntity.status(201).body(createdUtilisateur);
     }
 
