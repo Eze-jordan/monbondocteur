@@ -31,11 +31,26 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
        final  String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            token = authorization.substring(7);
-            isTokenExpired = jwtService.isTokenExpired(token);
-            username = jwtService.extractUsername(token);
+        try {
+            if (authorization != null && authorization.startsWith("Bearer ")) {
+                token = authorization.substring(7);
+                isTokenExpired = jwtService.isTokenExpired(token);
+                username = jwtService.extractUsername(token);
+            }
+
+            if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = utilisateurService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            System.out.println("Erreur dans JwtFilter : " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            response.getWriter().write("Erreur d'authentification : " + e.getMessage());
         }
+
 
         if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
            UserDetails userDetails = utilisateurService.loadUserByUsername(username);
