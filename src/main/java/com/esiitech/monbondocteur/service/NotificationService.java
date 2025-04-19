@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
     JavaMailSender javaMailSender;
     public void envoyer (Validation validation) {
-    SimpleMailMessage message = new SimpleMailMessage();
-    message.setFrom("no-reply@gmail.com");
-    message.setTo(validation.getUtilisateur().getEmail());
-    message.setSubject("Votre code d'activation");
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("no-reply@gmail.com");
+        message.setTo(validation.getUtilisateur().getEmail());
+        message.setSubject("Votre code d'activation");
         String texte = String.format(
                 "Bonjour M/Mme %s,\n" +
                         "Nous vous informons que votre demande d'inscription a été reçue.\n" +
@@ -20,10 +20,10 @@ public class NotificationService {
                         "Si vous n'avez pas demandé cette inscription, veuillez ignorer ce message.\n"+
                         "Cordialement,\n"+
                         "L'équipe de MonBondocteur.",
-            validation.getUtilisateur().getNom(), validation.getCode());
+                validation.getUtilisateur().getNom(), validation.getCode());
 
-    message.setText(texte);
-    javaMailSender.send(message);
+        message.setText(texte);
+        javaMailSender.send(message);
 
     }
 

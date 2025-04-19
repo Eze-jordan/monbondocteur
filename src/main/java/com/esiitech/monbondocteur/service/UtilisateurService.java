@@ -124,17 +124,6 @@ public class UtilisateurService implements UserDetailsService {
         utilisateurActiver.setActif(true);
         utilisateurRepository.save(utilisateurActiver);
     }
-    public List<UtilisateurDTO> getAllMedecins() {
-        return utilisateurRepository.findByRole(Role.MEDECIN)
-                .stream()
-                .map(utilisateurMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-
-    public List<Utilisateur> getAllUsers() {
-        return utilisateurRepository.findByRole(Role.USER);
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

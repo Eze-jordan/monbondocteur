@@ -2,7 +2,6 @@ package com.esiitech.monbondocteur.controller;
 
 import com.esiitech.monbondocteur.dto.AuthentificationDTO;
 import com.esiitech.monbondocteur.dto.UtilisateurDTO;
-import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.security.JwtService;
 import com.esiitech.monbondocteur.service.UtilisateurService;
 
@@ -21,8 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/utilisateurs")
 @Tag(name = "Utilisateurs", description = "Opérations de gestion des utilisateurs et authentification")
 public class UtilisateurController {
 
@@ -99,18 +99,6 @@ public class UtilisateurController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedUtilisateur);
-    }
-    // GET /utilisateurs/medecins
-    @GetMapping("/medecins")
-    public List<UtilisateurDTO> getAllMedecins() {
-        return utilisateurService.getAllMedecins();
-    }
-
-
-    // GET /utilisateurs/users
-    @GetMapping("/users")
-    public List<Utilisateur> getAllUsers() {
-        return utilisateurService.getAllUsers();
     }
 
     @DeleteMapping("/{id}")
