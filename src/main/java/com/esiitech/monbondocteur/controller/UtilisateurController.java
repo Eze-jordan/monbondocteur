@@ -45,8 +45,13 @@ public class UtilisateurController {
 
     @PostMapping("/activation")
     @Operation(summary = "Activer un compte utilisateur", description = "Active un utilisateur via un token ou un code d’activation")
-    public void activation(@RequestBody Map<String, String> activation) {
-        this.utilisateurService.activation(activation);
+    public ResponseEntity<String> activation(@RequestBody Map<String, String> activation) {
+        try {
+            this.utilisateurService.activation(activation);
+            return ResponseEntity.ok("Compte activé avec succès.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/connexion")

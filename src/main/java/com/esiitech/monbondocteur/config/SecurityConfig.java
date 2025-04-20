@@ -40,21 +40,17 @@ public class SecurityConfig {
         return
                 httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        authorize -> authorize
-                        .requestMatchers(
-                                "/api/users/activation", // 👈 on autorise cette route
-                                "/api/users",            // 👈 autorisation pour l’inscription aussi si besoin
-                                "/api/users/connexion",
-                                "/swagger-ui/**", "/v3/api-docs/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()      // 👈 sécurise les autres
-                )
-                        .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-
+                        .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(
+                                        "/api/users/activation",   // 👈 route publique
+                                        "/api/users",              // 👈 inscription publique
+                                        "/api/users/connexion",    // 👈 login public
+                                        "/swagger-ui/**", "/v3/api-docs/**" // 👈 Swagger public
+                                ).permitAll()
+                                .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authenticationProvider(authenticationProvider()) // 👈 ajoute ton provider ici
                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();
 
