@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 "/api/utilisateurs/activation", // 👈 on autorise cette route
                                 "/api/utilisateurs",            // 👈 autorisation pour l’inscription aussi si besoin
                                 "/api/utilisateurs/connexion",
-                                 "/swagger-ui/**", "/v3/api-docs/**"
+                                "/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()      // 👈 sécurise les autres
                 )

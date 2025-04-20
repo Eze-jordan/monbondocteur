@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,6 +72,7 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurs);
     }
 
+
     @GetMapping("/{id}")
     @Operation(summary = "Récupérer un utilisateur par ID", description = "Retourne les infos d’un utilisateur spécifique")
     public ResponseEntity<UtilisateurDTO> getUtilisateurById(
@@ -108,12 +110,17 @@ public class UtilisateurController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un utilisateur", description = "Permet de supprimer un utilisateur par ID")
-    public ResponseEntity<Void> deleteUtilisateur(
-            @Parameter(description = "ID de l'utilisateur à supprimer", required = true) @PathVariable Long id) {
+    public ResponseEntity<String> deleteUtilisateur(
+            @Parameter(description = "ID de l'utilisateur à supprimer", required = true)
+            @PathVariable Long id) {
+
         if (utilisateurService.existsById(id)) {
             utilisateurService.delete(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Utilisateur supprimé avec succès.");
         }
-        return ResponseEntity.notFound().build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Utilisateur avec l'ID " + id + " non trouvé.");
     }
+
 }

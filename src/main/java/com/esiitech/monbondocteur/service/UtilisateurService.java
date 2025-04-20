@@ -40,11 +40,12 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     public List<UtilisateurDTO> findAll() {
-        return utilisateurRepository.findAll()
-                .stream()
+        List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
+        return utilisateurs.stream()
                 .map(utilisateurMapper::toDto)
                 .collect(Collectors.toList());
     }
+
 
     public UtilisateurDTO findById(Long id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
