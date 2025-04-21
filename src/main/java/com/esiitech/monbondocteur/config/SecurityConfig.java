@@ -49,7 +49,9 @@ public class SecurityConfig {
                                         "/api/users",              // 👈 inscription publique
                                         "/api/users/connexion",    // 👈 login public
                                         "/swagger-ui/**", "/v3/api-docs/**" // 👈 Swagger public
+
                                 ).permitAll()
+                                .requestMatchers("/api/agenda/").hasAuthority("MEDECIN")
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
