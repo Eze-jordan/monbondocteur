@@ -52,8 +52,7 @@ public class SecurityConfig {
 
                                 ).permitAll()
                                 .requestMatchers("/api/agenda").hasAuthority("MEDECIN")
-                                .requestMatchers("/api/agenda/toutes").hasAnyAuthority("USER", "MEDECIN")
-                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
+                                .requestMatchers("/api/agenda/toutes").authenticated()                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
