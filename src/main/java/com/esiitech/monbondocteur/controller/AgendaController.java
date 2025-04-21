@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 @CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
-
 @RestController
 @RequestMapping("/api/agenda")
 @Tag(name = "Agenda", description = "Gestion des disponibilités des médecins")
@@ -46,6 +45,7 @@ public class AgendaController {
     }
 
     // Nouvelle méthode pour récupérer toutes les disponibilités
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('MEDECIN')")
     @GetMapping("/toutes")
     @Operation(summary = "Récupérer toutes les disponibilités", description = "Liste toutes les disponibilités de tous les médecins.")
     public ResponseEntity<List<AgendaDTO>> getAllDisponibilites() {
