@@ -3,6 +3,7 @@ import com.esiitech.monbondocteur.security.CustomUserDetailsService;
 import com.esiitech.monbondocteur.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -36,26 +37,25 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
-        return
-                httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                        .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(
-                                        "/api/users/activation",   // 👈 route publique
-                                        "/api/users",              // 👈 inscription publique
-                                        "/api/users/connexion",    // 👈 login public
-                                        "/swagger-ui/**", "/v3/api-docs/**" // 👈 Swagger public
-                                ).permitAll()
-                                .anyRequest().authenticated() // 👈 le reste sécurisé
-                        )
-                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                        .authenticationProvider(authenticationProvider()) // 👈 ajoute ton provider ici
-                        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                        .build();
-
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                HttpMethod.OPTIONS, "/", // ← autoriser OPTIONS partout
+                                "/api/users/activation",
+                                "/api/users",
+                                "/api/users/connexion",
+                                "/swagger-ui/",
+                                "/v3/api-docs/"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+       .build();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
