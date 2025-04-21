@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authenticationProvider(authenticationProvider()) // 👈 ajoute ton provider ici
                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();
 
