@@ -58,13 +58,21 @@ public class AgendaService {
                 .map(agendaMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
     public List<AgendaDTO> getAllDisponibilites() {
+        System.out.println("✅ Méthode getAllDisponibilites appelée"); // Pour debug
+
         return agendaRepository.findAll()
                 .stream()
-                .map(agendaMapper::toDTO)
+                .collect(Collectors.toMap(
+                        Agenda::getId,     // Clé = id unique
+                        agendaMapper::toDTO, // Valeur = DTO
+                        (existing, replacement) -> existing // Ignore les doublons d'ID
+                ))
+                .values()
+                .stream()
                 .collect(Collectors.toList());
     }
+
 
 
 }
