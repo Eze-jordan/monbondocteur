@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+@CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
 
 @RestController
 @RequestMapping("/api/agenda")
