@@ -9,11 +9,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("https://moubengou-bodri.highticketdeveloper.com") // Ton domaine
+        registry.addMapping("/") // ou "/api/" si tu veux restreindre
+                .allowedOrigins("https://moubengou-bodri.highticketdeveloper.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
-                .exposedHeaders("Authorization"); // Optionnel mais utile pour les headers comme Authorization
-    }
+                .exposedHeaders("Authorization");
+}
 }
