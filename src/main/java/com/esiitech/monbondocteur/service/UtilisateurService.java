@@ -42,9 +42,11 @@ public class UtilisateurService implements UserDetailsService {
     public List<UtilisateurDTO> findAll() {
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
         return utilisateurs.stream()
-                .map(utilisateurMapper::toDto)
+                .map(UtilisateurDTO::new)
+                .distinct()
                 .collect(Collectors.toList());
     }
+
 
 
     public UtilisateurDTO findById(Long id) {
@@ -141,4 +143,16 @@ public class UtilisateurService implements UserDetailsService {
                 .roles(utilisateur.getRole().name())
                 .build();
     }
+    public List<UtilisateurDTO> getAllMedecins() {
+        return utilisateurRepository.findByRole(Role.MEDECIN)
+                .stream()
+                .map(utilisateurMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Utilisateur> getAllUsers() {
+        return utilisateurRepository.findByRole(Role.USER);
+    }
+
 }

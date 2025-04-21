@@ -3,6 +3,7 @@ package com.esiitech.monbondocteur.controller;
 import com.esiitech.monbondocteur.dto.AuthentificationDTO;
 import com.esiitech.monbondocteur.dto.UtilisateurDTO;
 import com.esiitech.monbondocteur.model.Role;
+import com.esiitech.monbondocteur.model.Utilisateur;
 import com.esiitech.monbondocteur.security.JwtService;
 import com.esiitech.monbondocteur.service.UtilisateurService;
 
@@ -126,6 +127,18 @@ public class UtilisateurController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Utilisateur avec l'ID " + id + " non trouvé.");
+    }
+    // GET /utilisateurs/medecins
+    @GetMapping("/medecins")
+    public List<UtilisateurDTO> getAllMedecins() {
+        return utilisateurService.getAllMedecins();
+    }
+
+
+    // GET /utilisateurs/users
+    @GetMapping("/users")
+    public List<Utilisateur> getAllUsers() {
+        return utilisateurService.getAllUsers();
     }
 
 }
