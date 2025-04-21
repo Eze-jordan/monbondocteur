@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class AgendaController {
 
     @Autowired
     private AgendaService agendaService;
-
+    @PreAuthorize("hasAuthority('MEDECIN')")
     @PostMapping("/ajouter")
     @Operation(summary = "Ajouter une disponibilité", description = "Ajoute une nouvelle disponibilité pour un médecin donné.")
     public ResponseEntity<AgendaDTO> ajouterDisponibilite(@RequestBody AgendaDTO agendaDTO) {
