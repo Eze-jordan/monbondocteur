@@ -28,10 +28,7 @@ public class AgendaService {
     @Autowired
     private AgendaMapper agendaMapper;
 
-    public AgendaDTO ajouterDisponibilite(AgendaDTO agendaDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
+    public AgendaDTO ajouterDisponibilite(AgendaDTO agendaDTO, String email) {
         Utilisateur medecin = utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
@@ -39,10 +36,11 @@ public class AgendaService {
             throw new RuntimeException("Seuls les médecins peuvent ajouter des disponibilités !");
         }
 
-        Agenda agenda = agendaMapper.toEntity(agendaDTO, medecin);
+        Agenda agenda = agendaMapper.toEntity(agendaDTO, medecin); // Tu as déjà un mapper adapté
         agenda = agendaRepository.save(agenda);
         return agendaMapper.toDTO(agenda);
     }
+
 
 
     public List<AgendaDTO> getDisponibilitesParMedecin(Long medecinId) {

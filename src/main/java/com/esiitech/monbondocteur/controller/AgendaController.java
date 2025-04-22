@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 @CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
@@ -25,8 +26,8 @@ public class AgendaController {
     @PreAuthorize("hasAuthority('MEDECIN')")
     @PostMapping("/ajouter")
     @Operation(summary = "Ajouter une disponibilité", description = "Ajoute une nouvelle disponibilité pour un médecin donné.")
-    public ResponseEntity<AgendaDTO> ajouterDisponibilite(@RequestBody AgendaDTO agendaDTO) {
-        return ResponseEntity.ok(agendaService.ajouterDisponibilite(agendaDTO));
+    public ResponseEntity<AgendaDTO> ajouterDisponibilite(@RequestBody AgendaDTO agendaDTO, Principal principal) {
+        return ResponseEntity.ok(agendaService.ajouterDisponibilite(agendaDTO, principal.getName()));
     }
 
     @GetMapping("/medecin/{medecinId}")
