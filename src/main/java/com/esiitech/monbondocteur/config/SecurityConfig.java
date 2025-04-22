@@ -51,7 +51,7 @@ public class SecurityConfig {
                                         "/swagger-ui/**", "/v3/api-docs/**" // 👈 Swagger public
 
                                 ).permitAll()
-                                .requestMatchers("/api/agenda").hasAuthority("MEDECIN")
+                                .requestMatchers("/api/agenda/ajouter").hasAuthority("MEDECIN")
                                 .requestMatchers("/api/agenda/toutes").authenticated()                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
