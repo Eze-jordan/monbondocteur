@@ -23,7 +23,7 @@ public class AgendaController {
 
     @Autowired
     private AgendaService agendaService;
-    @PreAuthorize("hasAuthority('MEDECIN')")
+    @PreAuthorize("hasRole('MEDECIN')")
     @PostMapping("/ajouter")
     @Operation(summary = "Ajouter une disponibilité", description = "Ajoute une nouvelle disponibilité pour un médecin donné.")
     public ResponseEntity<AgendaDTO> ajouterDisponibilite(@RequestBody AgendaDTO agendaDTO, Principal principal) {
