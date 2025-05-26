@@ -48,15 +48,13 @@ public class SecurityConfig {
                         .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(
                                         "/api/users/activation",   // 👈 route publique
-                                        "/api/users",              // 👈 inscription publique
+                                        "/api/users/**",              // 👈 inscription publique
                                         "/api/users/connexion",    // 👈 login public
-                                        "/swagger-ui/**", "/v3/api-docs/**" // 👈 Swagger public
-
+                                        "/swagger-ui/**", "/v3/api-docs/**", // 👈 Swagger public
+                                        "/api/appointment/**",
+                                        "/api/agenda/**"
                                 ).permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/agenda/ajouter").hasRole("MEDECIN")
-                                .requestMatchers("/api/agenda/toutes").authenticated()                   
-                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
-                               .requestMatchers(HttpMethod.POST, "/api/appointment").hasRole("USER")
+
 
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )

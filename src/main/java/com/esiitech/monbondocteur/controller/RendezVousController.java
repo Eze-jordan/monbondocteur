@@ -14,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "*")
 @RestController
-@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/appointment")
 @Tag(name = "Rendez-vous", description = "Gestion des rendez-vous médicaux")
 public class RendezVousController {
