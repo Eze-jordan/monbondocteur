@@ -51,12 +51,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/users/activation",
-                                "/api/users/**",
                                 "/api/users/connexion",
+                                "/api/users/activation",
                                 "/swagger-ui/**", "/v3/api-docs/**",
                                 "/api/appointment/**",
-                                "/api/agenda/**"
+                                "/api/agenda/**",
+                                "/api/users/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
