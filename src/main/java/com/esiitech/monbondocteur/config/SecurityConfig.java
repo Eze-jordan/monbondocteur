@@ -53,7 +53,10 @@ public class SecurityConfig {
 
                                 ).permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/agenda/ajouter").hasRole("MEDECIN")
-                                .requestMatchers("/api/agenda/toutes").authenticated()                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
+                                .requestMatchers("/api/agenda/toutes").authenticated()                   
+                                .requestMatchers("/api/agenda/**").hasAuthority("MEDECIN")
+                               .requestMatchers(HttpMethod.POST, "/api/appointment").hasRole("USER")
+
                                 .anyRequest().authenticated() // 👈 le reste sécurisé
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
