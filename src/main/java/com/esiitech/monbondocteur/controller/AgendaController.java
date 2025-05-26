@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
-@CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/agenda")
 @Tag(name = "Agenda", description = "Gestion des disponibilités des médecins")
