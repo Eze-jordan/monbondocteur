@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "*")
-
+@CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
 @RestController
 @RequestMapping("/api/validations")
 @Tag(name = "Validations", description = "Gestion des codes de validation des utilisateurs")

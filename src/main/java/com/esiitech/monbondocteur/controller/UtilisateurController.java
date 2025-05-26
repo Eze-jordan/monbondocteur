@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
 
 @RestController
 @RequestMapping("/api/users")
