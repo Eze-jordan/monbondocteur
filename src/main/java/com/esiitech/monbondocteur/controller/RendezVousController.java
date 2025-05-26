@@ -31,7 +31,6 @@ public class RendezVousController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Ajouter un rendez-vous", description = "Permet d'enregistrer un nouveau rendez-vous avec les informations du patient et du médecin.")
     public ResponseEntity<RendezVous> ajouterRendezVous(@RequestBody RendezVousDTO dto) {
         RendezVous rendezVous = rendezVousService.ajouterRendezVous(dto);
