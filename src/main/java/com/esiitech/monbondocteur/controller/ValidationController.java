@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "https://moubengou-bodri.highticketdeveloper.com")
+@CrossOrigin(origins = "*")
 
 @RestController
 @RequestMapping("/api/validations")
