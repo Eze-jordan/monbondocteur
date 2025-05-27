@@ -34,7 +34,7 @@ public class RendezVousMapper {
         dto.setDescription(rendezVous.getDescription());
         dto.setQuartier(rendezVous.getQuartier());
         dto.setMedecinId(rendezVous.getMedecin().getId());
-        dto.setAgenaId(rendezVous.getAgenda().getId());
+        dto.setAgendaId(rendezVous.getAgenda().getId());
         return dto;
     }
 }

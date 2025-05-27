@@ -39,7 +39,7 @@ public class RendezVousService {
         if (dto.getMedecinId() == null) {
             throw new IllegalArgumentException("L'ID du médecin ne doit pas être null.");
         }
-        if (dto.getAgenaId() == null) {
+        if (dto.getAgendaId() == null) {
             throw new IllegalArgumentException("L'ID de l'agenda ne doit pas être null.");
         }
 
@@ -53,7 +53,7 @@ public class RendezVousService {
         }
 
         // 🔍 Récupération de l'agenda correspondant
-        Agenda agenda = agendaRepository.findById(dto.getAgenaId())
+        Agenda agenda = agendaRepository.findById(dto.getAgendaId())
                 .orElseThrow(() -> new RuntimeException("Agenda non trouvé"));
 
         // 📧 Envoi des notifications aux parties concernées
@@ -102,8 +102,8 @@ public class RendezVousService {
         }
 
         // 🔄 Met à jour l’agenda si besoin
-        if (dto.getAgenaId() != null && !dto.getAgenaId().equals(existant.getAgenda().getId())) {
-            Agenda nouvelAgenda = agendaRepository.findById(dto.getAgenaId())
+        if (dto.getAgendaId() != null && !dto.getAgendaId().equals(existant.getAgenda().getId())) {
+            Agenda nouvelAgenda = agendaRepository.findById(dto.getAgendaId())
                     .orElseThrow(() -> new RuntimeException("Agenda non trouvé"));
             existant.setAgenda(nouvelAgenda);
         }
