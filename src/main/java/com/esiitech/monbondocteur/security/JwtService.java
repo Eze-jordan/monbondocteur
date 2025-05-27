@@ -54,7 +54,7 @@ public class JwtService {
     }
     // Définit l'heure actuelle et l'expiration du JWT
     final long currentTime = System.currentTimeMillis();
-    final long expirationTime = currentTime + 5 + 60 * 60 * 1000;  // 5 Heures
+    final long expirationTime = currentTime + 1 + 60 * 60 * 1000;  // 5 Heures
 
     // Cette méthode génère un JWT à partir des informations de l'utilisateur
     private Map<String, String> generateJwt(Utilisateur utilisateur) {
