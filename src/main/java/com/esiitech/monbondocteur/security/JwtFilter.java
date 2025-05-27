@@ -25,13 +25,22 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        System.out.println("→ URI reçue : " + path); // Debug log
+
+        // ✅ Laisse passer directement les routes publiques
+        if (path.startsWith("/api/appointment")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = null;
         String username = null;
         boolean isTokenExpired = true;
 
+        final String authorization = request.getHeader("Authorization");
 
-
-       final  String authorization = request.getHeader("Authorization");
         try {
             if (authorization != null && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
@@ -45,28 +54,15 @@ public class JwtFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            filterChain.doFilter(request, response);
+
+            filterChain.doFilter(request, response); // ✅ UN SEUL APPEL
+
         } catch (Exception e) {
             System.out.println("Erreur dans JwtFilter : " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            response.setContentType("text/plain");
             response.getWriter().write("Erreur d'authentification : " + e.getMessage());
         }
-
-
-        if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-           UserDetails userDetails = utilisateurService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
-                    (userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/appointment")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        filterChain.doFilter(request, response);
-
-
     }
+
 }
