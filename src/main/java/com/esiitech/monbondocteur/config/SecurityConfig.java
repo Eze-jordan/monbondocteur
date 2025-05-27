@@ -51,14 +51,17 @@
                     .csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers(
+                                    "/api/users/**",
                                     "/api/users/connexion",
                                     "/api/users/activation",
-                                    "/swagger-ui/**", "/v3/api-docs/**",
                                     "/api/agenda/**",
-                                    "/api/users/**"
+                                    "/api/appointment",
+                                    "/api/appointment/**",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+
+
                             ).permitAll()
-                            .requestMatchers("/api/appointment",
-                                             "/api/appointment/**").permitAll()
                             .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
