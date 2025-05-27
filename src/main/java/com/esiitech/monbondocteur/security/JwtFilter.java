@@ -25,40 +25,47 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = null;
-        String username = null;
-        boolean isTokenExpired = true;
 
+        String path = request.getServletPath();
 
-       final  String authorization = request.getHeader("Authorization");
+        // Ignorer les endpoints publics
+        if (path.startsWith("/api/users/connexion") ||
+                path.startsWith("/api/users/activation") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/api/appointment") ||
+                path.startsWith("/api/agenda")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
+            final String authorization = request.getHeader("Authorization");
+            String token = null;
+            String username = null;
+
             if (authorization != null && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
-                isTokenExpired = jwtService.isTokenExpired(token);
-                username = jwtService.extractUsername(token);
+                if (!jwtService.isTokenExpired(token)) {
+                    username = jwtService.extractUsername(token);
+                }
             }
 
-            if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = utilisateurService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken =
+                UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-            filterChain.doFilter(request, response);
+
         } catch (Exception e) {
             System.out.println("Erreur dans JwtFilter : " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Erreur d'authentification : " + e.getMessage());
+            return; // on ne continue pas
         }
 
-
-        if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-           UserDetails userDetails = utilisateurService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
-                    (userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
         filterChain.doFilter(request, response);
-
     }
+
 }
