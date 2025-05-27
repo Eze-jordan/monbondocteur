@@ -32,7 +32,10 @@ public class JwtFilter extends OncePerRequestFilter {
         // 🔓 Laisse passer les routes publiques sans traitement JWT
         if (path.startsWith("/api/users/connexion") ||
                 path.startsWith("/api/users/activation") ||
+                path.startsWith("/api/appointment") ||
                 path.startsWith("/api/agenda") ||
+                path.startsWith("/api/appointment/**") ||
+                path.startsWith("/api/agenda/**") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);

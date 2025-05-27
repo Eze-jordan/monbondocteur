@@ -54,10 +54,11 @@
                                     "/api/users/connexion",
                                     "/api/users/activation",
                                     "/swagger-ui/**", "/v3/api-docs/**",
+                                    "/api/appointment",
+                                    "/api/appointment/**",
                                     "/api/agenda/**",
                                     "/api/users/**"
                             ).permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/appointment").hasRole("USER")
                             .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
