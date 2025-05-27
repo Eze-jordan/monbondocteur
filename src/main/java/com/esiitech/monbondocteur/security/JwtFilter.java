@@ -30,6 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         boolean isTokenExpired = true;
 
 
+
        final  String authorization = request.getHeader("Authorization");
         try {
             if (authorization != null && authorization.startsWith("Bearer ")) {
@@ -58,6 +59,12 @@ public class JwtFilter extends OncePerRequestFilter {
                     (userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/appointment")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         filterChain.doFilter(request, response);
 
 
