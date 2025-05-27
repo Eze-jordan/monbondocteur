@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
 @Service
 public class JwtFilter extends OncePerRequestFilter {
-    private final UtilisateurService utilisateurService;
-    private final JwtService jwtService;
+    private  UtilisateurService utilisateurService;
+    private  JwtService jwtService;
 
     public JwtFilter(UtilisateurService utilisateurService, JwtService jwtService) {
         this.utilisateurService = utilisateurService;
@@ -27,26 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-        System.out.println("→ URI reçue : " + path);
+        String token = null;
+        String username = null;
+        boolean isTokenExpired = true;
 
-        // 🔓 Exclusion des routes publiques (notamment /api/appointment)
-        if (path.startsWith("/api/appointment") ||
-                path.startsWith("/api/users/connexion") ||
-                path.startsWith("/api/users/activation") ||
-                path.startsWith("/api/agenda") ||
-                path.startsWith("/swagger-ui") ||
-                path.startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
+
+       final  String authorization = request.getHeader("Authorization");
         try {
-            String token = null;
-            String username = null;
-            boolean isTokenExpired = true;
-
-            final String authorization = request.getHeader("Authorization");
             if (authorization != null && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
                 isTokenExpired = jwtService.isTokenExpired(token);
@@ -59,13 +46,23 @@ public class JwtFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
-            filterChain.doFilter(request, response); // ✅ Appelé une seule fois
+            filterChain.doFilter(request, response);
         } catch (Exception e) {
             System.out.println("Erreur dans JwtFilter : " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("text/plain");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
             response.getWriter().write("Erreur d'authentification : " + e.getMessage());
         }
+
+
+        if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+           UserDetails userDetails = utilisateurService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
+                    (userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+
+        filterChain.doFilter(request, response);
+
+
     }
 }
