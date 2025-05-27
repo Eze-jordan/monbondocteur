@@ -59,10 +59,6 @@ public class JwtFilter extends OncePerRequestFilter {
                     (userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/appointment")) {
-            return;
-        }
 
         filterChain.doFilter(request, response);
 
