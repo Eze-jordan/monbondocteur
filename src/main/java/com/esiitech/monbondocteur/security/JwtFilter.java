@@ -14,8 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 @Service
 public class JwtFilter extends OncePerRequestFilter {
-    private  UtilisateurService utilisateurService;
-    private  JwtService jwtService;
+
+    private final UtilisateurService utilisateurService;
+    private final JwtService jwtService;
 
     public JwtFilter(UtilisateurService utilisateurService, JwtService jwtService) {
         this.utilisateurService = utilisateurService;
@@ -25,40 +26,43 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = null;
-        String username = null;
-        boolean isTokenExpired = true;
 
+        String path = request.getRequestURI();
 
-       final  String authorization = request.getHeader("Authorization");
-        try {
-            if (authorization != null && authorization.startsWith("Bearer ")) {
-                token = authorization.substring(7);
-                isTokenExpired = jwtService.isTokenExpired(token);
-                username = jwtService.extractUsername(token);
-            }
-
-            if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = utilisateurService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+        // 🔓 Laisse passer les routes publiques sans traitement JWT
+        if (path.startsWith("/api/users/connexion") ||
+                path.startsWith("/api/users/activation") ||
+                path.startsWith("/api/agenda") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String authHeader = request.getHeader("Authorization");
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+                String username = jwtService.extractUsername(token);
+
+                if (username != null && !jwtService.isTokenExpired(token) &&
+                        SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                    UserDetails userDetails = utilisateurService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+
+            filterChain.doFilter(request, response);
+
         } catch (Exception e) {
             System.out.println("Erreur dans JwtFilter : " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
             response.getWriter().write("Erreur d'authentification : " + e.getMessage());
         }
-
-
-        if (!isTokenExpired && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-           UserDetails userDetails = utilisateurService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
-                    (userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
-        filterChain.doFilter(request, response);
-
     }
 }
