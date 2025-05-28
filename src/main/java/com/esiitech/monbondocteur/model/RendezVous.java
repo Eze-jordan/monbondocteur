@@ -18,7 +18,6 @@ public class RendezVous {
     private int age;
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
-    @Column(unique = true, nullable = false)
     private String email;
     private String numeroTelephone;
     private String description;
